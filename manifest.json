@@ -1,0 +1,20 @@
+{
+  "short_name": "The Light",
+  "name": "The Light Publication",
+  "icons": [
+    {
+      "src": "https://i.imgur.com/WhsJ3hf.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://i.imgur.com/WhsJ3hf.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#FFEB3B",
+  "background_color": "#ffffff"
+}

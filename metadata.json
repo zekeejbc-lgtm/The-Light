@@ -1,0 +1,5 @@
+{
+  "name": "The Light Publication",
+  "description": "Official PWA for The Light School Publication featuring role-based access, dynamic content management, and AI-powered research tools.",
+  "requestFramePermissions": []
+}
