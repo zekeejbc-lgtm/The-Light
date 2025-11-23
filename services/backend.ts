@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app';
+
+import { initializeApp, FirebaseApp } from 'firebase/app';
 import { 
   getFirestore, 
   collection, 
@@ -12,13 +13,15 @@ import {
   where, 
   orderBy, 
   limit, 
-  increment
+  increment,
+  Firestore
 } from 'firebase/firestore';
 import { 
   getAuth, 
   signInWithPopup, 
   GoogleAuthProvider, 
-  signOut
+  signOut,
+  Auth
 } from 'firebase/auth';
 
 // Types
@@ -46,8 +49,11 @@ const firebaseConfig = {
   appId: "1:123456789:web:abcdef123456"
 };
 
-// Initialize only if window is defined (client-side)
-let app, db, auth, provider;
+// Initialize variables with explicit types
+let app: FirebaseApp | undefined;
+let db: Firestore | undefined;
+let auth: Auth | undefined;
+let provider: GoogleAuthProvider | undefined;
 
 try {
     app = initializeApp(firebaseConfig);
@@ -61,7 +67,7 @@ try {
 // --- Auth Services ---
 
 export const loginWithGoogle = async (): Promise<User> => {
-  if (!auth) throw new Error("Firebase not initialized");
+  if (!auth || !provider || !db) throw new Error("Firebase not initialized");
   const result = await signInWithPopup(auth, provider);
   const user = result.user;
   
