@@ -1,4 +1,18 @@
 
+import { 
+  Article, 
+  User, 
+  UserRole,
+  PageConfig
+} from '../types';
+
+/*
+// NOTE: Firebase imports commented out due to missing dependencies/configuration in this environment.
+// To enable Firebase backend:
+// 1. Install firebase: npm install firebase
+// 2. Ensure you are using Firebase v9+ Modular SDK
+// 3. Uncomment the imports and code below.
+
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { 
   getFirestore, 
@@ -23,23 +37,11 @@ import {
   signOut,
   Auth
 } from 'firebase/auth';
-
-// Types
-import { 
-  Article, 
-  User, 
-  UserRole,
-  ArticleReport,
-  SystemConfig,
-  Comment,
-  SearchResult,
-  AccessLog,
-  ArticleReactions,
-  PageConfig
-} from '../types';
+*/
 
 // --- Firebase Configuration ---
 // REPLACE WITH YOUR FIREBASE CONFIG
+/*
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY_HERE",
   authDomain: "your-app.firebaseapp.com",
@@ -50,10 +52,10 @@ const firebaseConfig = {
 };
 
 // Initialize variables with explicit types
-let app: FirebaseApp | undefined;
-let db: Firestore | undefined;
-let auth: Auth | undefined;
-let provider: GoogleAuthProvider | undefined;
+let app: any; // FirebaseApp
+let db: any; // Firestore
+let auth: any; // Auth
+let provider: any; // GoogleAuthProvider
 
 try {
     app = initializeApp(firebaseConfig);
@@ -63,10 +65,13 @@ try {
 } catch (e) {
     console.warn("Firebase not initialized. Check configuration.");
 }
+*/
 
 // --- Auth Services ---
 
 export const loginWithGoogle = async (): Promise<User> => {
+  throw new Error("Firebase backend is not configured.");
+  /*
   if (!auth || !provider || !db) throw new Error("Firebase not initialized");
   const result = await signInWithPopup(auth, provider);
   const user = result.user;
@@ -92,18 +97,18 @@ export const loginWithGoogle = async (): Promise<User> => {
     await addDoc(collection(db, 'users'), userData); 
   }
   return userData;
+  */
 };
 
 export const logout = async (): Promise<void> => {
-  if (auth) await signOut(auth);
+  // if (auth) await signOut(auth);
 };
 
 // --- Content Services Helpers (Backend Implementation) ---
 
-// Note: To fully replace the mock service, you would map all functions 
-// from services/contentService.ts to use these Firestore calls.
-
 export const getArticles = async (categorySlug?: string): Promise<Article[]> => {
+  return [];
+  /*
   if (!db) return [];
   const articlesRef = collection(db, 'articles');
   let q;
@@ -125,9 +130,11 @@ export const getArticles = async (categorySlug?: string): Promise<Article[]> => 
 
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Article));
+  */
 };
 
 export const createArticle = async (article: Article): Promise<void> => {
+  /*
   if (!db) return;
   const { id, ...data } = article; 
   // Using addDoc allows Firestore to generate ID, or use setDoc with custom ID
@@ -137,37 +144,51 @@ export const createArticle = async (article: Article): Promise<void> => {
     views: 0,
     reactions: { like:0, love:0, insightful:0, sad:0 }
   });
+  */
 };
 
 export const updateArticle = async (article: Article): Promise<void> => {
+  /*
   if (!db) return;
   const docRef = doc(db, 'articles', article.id);
   await updateDoc(docRef, { ...article });
+  */
 };
 
 export const deleteArticle = async (id: string): Promise<void> => {
+  /*
   if (!db) return;
   await deleteDoc(doc(db, 'articles', id));
+  */
 };
 
 export const getPages = async (): Promise<PageConfig[]> => {
+    return [];
+    /*
     if (!db) return [];
     const q = query(collection(db, 'pages'), orderBy('orderScore', 'asc'));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as PageConfig));
+    */
 };
 
 export const createPage = async (page: PageConfig): Promise<void> => {
+    /*
     if (!db) return;
     await addDoc(collection(db, 'pages'), page);
+    */
 };
 
 export const updatePage = async (id: string, updates: Partial<PageConfig>): Promise<void> => {
+    /*
     if (!db) return;
     await updateDoc(doc(db, 'pages', id), updates);
+    */
 };
 
 export const deletePage = async (id: string): Promise<void> => {
+    /*
     if (!db) return;
     await deleteDoc(doc(db, 'pages', id));
+    */
 };
