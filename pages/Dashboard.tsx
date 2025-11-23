@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { User, UserRole, Article, PageConfig, Notification, AccessLog, SystemConfig, SearchResult } from '../types';
-import { createArticle, updateArticle, getPages, getUserNotifications, markNotificationRead, updateSystemConfig, getSystemConfig, getAllArticles, getAccessLogs, updateArticleStatus, searchContent } from '../services/contentService';
-import { getAllUsers, removeUser, createUser } from '../services/authService';
+import { createArticle, updateArticle, getUserNotifications, markNotificationRead, updateSystemConfig, getSystemConfig, getAllArticles, getAccessLogs, searchContent } from '../services/contentService';
+import { getAllUsers } from '../services/authService';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import CustomSelect from '../components/CustomSelect';
 import { useToast } from '../context/ToastContext';
@@ -106,7 +105,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
           addToast("Title and Content are required.", 'error');
           return;
       }
-      const toastId = addToast(status === 'draft' ? "Saving draft..." : "Submitting...", 'loading');
+      addToast(status === 'draft' ? "Saving draft..." : "Submitting...", 'loading');
       const articleData: Article = {
           id: editingArticle ? editingArticle.id : Date.now().toString(),
           title: writeTitle,
@@ -497,13 +496,13 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
 
                  {activeTab === 'logs' && isAdmin && (
                      <div className="space-y-4 animate-fade-in-up">
-                        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm w-full">
                             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-800">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap">Timestamp</th>
-                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap">User</th>
-                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap">Action</th>
+                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap w-40">Timestamp</th>
+                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap w-48">User</th>
+                                        <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider whitespace-nowrap w-32">Action</th>
                                         <th className="px-6 py-3 text-left text-xs font-black text-gray-500 uppercase tracking-wider min-w-[200px]">Details</th>
                                     </tr>
                                 </thead>
@@ -514,7 +513,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
                                                 {new Date(log.timestamp).toLocaleString()}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="text-sm font-bold dark:text-white block">{log.userName}</span>
+                                                <span className="text-sm font-bold dark:text-white block truncate max-w-[150px]" title={log.userName}>{log.userName}</span>
                                                 {log.userId && <span className="text-[10px] text-gray-400 font-mono">ID: {log.userId}</span>}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -526,7 +525,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
                                                     {log.action.replace('_', ' ')}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 min-w-[250px] whitespace-normal">
+                                            <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 min-w-[250px] whitespace-normal break-words">
                                                 {log.details}
                                             </td>
                                         </tr>
@@ -544,7 +543,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
 
                  {activeTab === 'system' && isAdmin && sysConfig && (
                      <form onSubmit={handleSystemSave} className="max-w-4xl mx-auto space-y-8 animate-fade-in-up">
-                         {/* System Config Form - Same as before */}
+                         {/* System Config Form */}
                          <div className="bg-white dark:bg-gray-800/30 p-8 rounded-xl border-2 border-black dark:border-gray-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
                             <h3 className="text-xl font-black uppercase mb-6 dark:text-white border-b-2 border-gray-200 dark:border-gray-700 pb-2">Brand Identity</h3>
                             
@@ -579,7 +578,6 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onProfileUpdate }) => {
                                 </div>
 
                                 <div className="space-y-6">
-                                    {/* Redesigned Color Pickers */}
                                     {[{label: "Primary Color", key: 'primaryColor' as const}, {label: "Accent Color", key: 'accentColor' as const}].map(color => (
                                         <div key={color.key}>
                                             <label className="block text-xs font-bold uppercase mb-2 dark:text-gray-300">{color.label}</label>
